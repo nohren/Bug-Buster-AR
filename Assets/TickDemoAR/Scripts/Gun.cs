@@ -44,7 +44,7 @@ public class Gun : MonoBehaviour
 
     private void ShootABullet()
     {
-      // get current muzzle direction using the struct transform.rotation, also get the current position in world space using the struct transform.postion
+       // apply the current quaternion transformation to the z vector.
       muzzleDirection = muzzle.rotation * Vector3.forward;
       RaycastHit hit;
       Ray bulletDirection = new Ray(muzzle.position, muzzleDirection);
@@ -53,7 +53,8 @@ public class Gun : MonoBehaviour
       {
         if (hit.collider.tag == "Spider")
         {
-          Debug.Log("Hit a spider");
+          SpiderBrain brainInstance = hit.collider.gameObject.GetComponent<SpiderBrain>();
+          brainInstance.Die();
         }
       }
     }

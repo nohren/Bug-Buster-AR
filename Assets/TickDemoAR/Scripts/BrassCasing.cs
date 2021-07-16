@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class BrassCasing : MonoBehaviour
 {
-    Rigidbody rb;
     private float timeElapsed = 0f;
     public float recycleTimeInSeconds = 2f;
     private float ejectionUnitsPerSecond = 1.33f;
     
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame

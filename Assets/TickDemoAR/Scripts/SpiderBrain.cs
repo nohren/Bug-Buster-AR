@@ -11,7 +11,8 @@ public class SpiderBrain : MonoBehaviour
     private int biteHashId = Animator.StringToHash("Bite");
     private int rotateHashId = Animator.StringToHash("Rotate");
     private int runHashId = Animator.StringToHash("Run");
-    private bool biteAnimationLoop = false;
+    private int dieHashId = Animator.StringToHash("Die");
+    private bool animationLoop = false;
     private float rotationDegreesPerSecond = 0f;
     private float speedInCentimetersPerSecond = 0f;
     private float spiderSpeed;
@@ -21,6 +22,7 @@ public class SpiderBrain : MonoBehaviour
     private Vector3 spiderDirection;
     delegate IEnumerator AnimationMethod();
     AnimationMethod[] animationMethods;
+    Coroutine currentAnimation;
     
     private void Start()
     {
@@ -36,10 +38,10 @@ public class SpiderBrain : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (biteAnimationLoop == false)
+        if (animationLoop == false)
         {
-            biteAnimationLoop = true;
-            StartCoroutine(animationMethods[GenerateRandomNumber()]());
+            animationLoop = true;
+            currentAnimation = StartCoroutine(animationMethods[GenerateRandomNumber()]());
         }
         MovementUpdater();
     }
@@ -54,7 +56,7 @@ public class SpiderBrain : MonoBehaviour
       rotationDegreesPerSecond = 90f;
       yield return new WaitForSecondsRealtime(5f);
       rotationDegreesPerSecond = 0f;
-      biteAnimationLoop = false;
+      animationLoop = false;
     }
     private IEnumerator AnimationSequence2()
     {
@@ -67,7 +69,7 @@ public class SpiderBrain : MonoBehaviour
       ConstantRotation(-30f);
       yield return new WaitForSecondsRealtime(3f);
       ConstantRotation(0f);
-      biteAnimationLoop = false;
+      animationLoop = false;
     }
     private IEnumerator AnimationSequence3()
     {
@@ -80,7 +82,7 @@ public class SpiderBrain : MonoBehaviour
       ConstantRotation(0f);
       Bite();
       yield return new WaitForSecondsRealtime(7f);
-      biteAnimationLoop = false;
+      animationLoop = false;
     }
     private IEnumerator AnimationSequence4()
     {
@@ -92,7 +94,7 @@ public class SpiderBrain : MonoBehaviour
       ConstantRunning(SpeedGenerator());
       yield return new WaitForSecondsRealtime(2f);
       ConstantRunning(0f);
-      biteAnimationLoop = false;
+      animationLoop = false;
     }
 
     private void Bite()
@@ -106,6 +108,21 @@ public class SpiderBrain : MonoBehaviour
     private void ConstantRotation(float degreesPerSecond)
     {
       rotationDegreesPerSecond = degreesPerSecond;
+    }
+    private void StopMovement()
+    {
+      animationLoop = true;
+      speedInCentimetersPerSecond = 0f;
+      rotationDegreesPerSecond = 0f;
+    }
+    public void Die()
+    {
+      if (currentAnimation != null)
+      {
+        StopCoroutine(currentAnimation);
+      }
+      StopMovement();
+      anim.SetTrigger(dieHashId);
     }
 
     private void MovementUpdater()

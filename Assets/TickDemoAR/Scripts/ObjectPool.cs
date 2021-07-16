@@ -58,7 +58,6 @@ public class ObjectPool : MonoBehaviour
               tmp.SetActive(false);
               pooledObjects.Add(tmp);
             }
-            // return GetPooledObject();
             return GetPooledObject();
         }
     }
