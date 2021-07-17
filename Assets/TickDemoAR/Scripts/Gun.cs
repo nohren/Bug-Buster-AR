@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    public GameObject bulletImpactAndHole;
     Animator anim;
     private int fireHashId = Animator.StringToHash("Fire");
     private bool firing = false;
     public GameObject flash;
     private int thompsonM1a1RPM = 700;
     private float wholeBrass = 0f;
+    private float acp45RadiusInMeters = 0.0115f / 2f;
     public Transform muzzle;
     private Vector3 muzzleDirection;
     Coroutine present;
@@ -49,12 +51,14 @@ public class Gun : MonoBehaviour
       RaycastHit hit;
       Ray bulletDirection = new Ray(muzzle.position, muzzleDirection);
       // Debug.DrawRay(muzzle.position, muzzleDirection, Color.red, 1f); // for debug purposes.
-      if (Physics.Raycast(bulletDirection, out hit))
+      if (Physics.SphereCast(bulletDirection, acp45RadiusInMeters, out hit))
       {
+        Debug.Log(hit.collider.gameObject);
         if (hit.collider.tag == "Spider")
         {
           SpiderBrain brainInstance = hit.collider.gameObject.GetComponent<SpiderBrain>();
           brainInstance.Die();
+          Instantiate(bulletImpactAndHole, hit.collider.transform.position, Quaternion.identity);
         }
       }
     }

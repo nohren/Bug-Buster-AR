@@ -23,6 +23,8 @@ public class SpiderBrain : MonoBehaviour
     delegate IEnumerator AnimationMethod();
     AnimationMethod[] animationMethods;
     Coroutine currentAnimation;
+    private ParticleSystem part;
+    private GameObject parent;
     
     private void Start()
     {
@@ -34,6 +36,8 @@ public class SpiderBrain : MonoBehaviour
           AnimationSequence3,
           AnimationSequence4
         };
+        parent = transform.parent.gameObject;
+        part = parent.GetComponentInChildren<ParticleSystem>();
     }
 
     private void FixedUpdate()
@@ -117,12 +121,8 @@ public class SpiderBrain : MonoBehaviour
     }
     public void Die()
     {
-      if (currentAnimation != null)
-      {
-        StopCoroutine(currentAnimation);
-      }
-      StopMovement();
-      anim.SetTrigger(dieHashId);
+      part.Play();
+      gameObject.SetActive(false);
     }
 
     private void MovementUpdater()
