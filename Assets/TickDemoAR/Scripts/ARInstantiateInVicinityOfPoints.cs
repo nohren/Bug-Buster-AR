@@ -39,13 +39,6 @@ public class ARInstantiateInVicinityOfPoints : MonoBehaviour
     private bool accumulatePoints = false;
     private Vector3 initialCheckForShaking;
     
-
-    public Vector3? InitialCheckForShaking 
-    {
-      get => initialCheckForShaking;
-    }
-    
-    
     void OnEnable()
     {
       OnButtonClick.OnShakingTheTree += CheckForPointsAndShaking;
@@ -71,6 +64,10 @@ public class ARInstantiateInVicinityOfPoints : MonoBehaviour
     // Don't forget scope and separation of concerns.
     void Update()
     {
+      if (pointTable != null)
+      {
+        // Debug.Log("Feature points accumulated: " + pointTable.Count);
+      }
        // sample and low pass filter on each frame
        lowPassValue = LowPassFilterAccelerometer(lowPassValue);
       
@@ -80,33 +77,35 @@ public class ARInstantiateInVicinityOfPoints : MonoBehaviour
          ValueCheck();
        }
 
-       // get a reference to the point cloud, otherwise instantiate the list of points
-       if (_arPointCloud == null)
+       // get a reference to the point cloud component
+       if (_arPointCloud == null) 
        {
            _arPointCloud = _arSessionOrigin.trackablesParent.GetComponentInChildren<ARPointCloud>();
        } 
        else 
        {
-           if (_arPointCloud.positions != null)
-           {
-            if (accumulatePoints == true)
+         // we have a reference
+         if (_arPointCloud.positions != null)
+         {
+          if (accumulatePoints == true)
+          {
+            if (pointTable == null)
             {
-              if (pointTable == null)
-              {
-                SetNewPointerForFeaturePointList(_arPointCloud.positions);
-              }
-              else
-              {
-                AddNewFeaturePoints(_arPointCloud.positions);
-              }
-              
+              SetNewPointerForFeaturePointList(_arPointCloud.positions);
             }
-           }
+            else
+            {
+              AddNewFeaturePoints(_arPointCloud.positions);
+            }
+            
+          }
+         }
        }
     }
     
     public void SetNewPointerForFeaturePointList(NativeSlice<Vector3>? list)
     {
+      Debug.Log("Point Table has data");
       pointTable = new Dictionary<Vector3, bool>();
       foreach(Vector3 point in list)
       {
@@ -201,13 +200,18 @@ public class ARInstantiateInVicinityOfPoints : MonoBehaviour
       tickTarget.SetActive(false);
       accumulatePoints = false;
       checkingForShaking = false;  
-      float zAvg = PositionZAverage(pointTable);
-      List<Vector3> targetPoints = SelectFeaturePointWithinRadius(zAvg, pointTable);
-      foreach(Vector3 point in targetPoints)
+      if (pointTable != null)
       {
-        Instantiate(tick, point, Quaternion.identity);
+        float zAvg = PositionZAverage(pointTable);
+        List<Vector3> targetPoints = SelectFeaturePointWithinRadius(zAvg, pointTable);
+        foreach(Vector3 point in targetPoints)
+        {
+          Instantiate(tick, point, Quaternion.identity);
+        }
+        pointTable = null;
+      } else {
+        Debug.Log("Point dictionary is null, so coming in from AR_pointCloud null");
       }
-      pointTable = null;
     }
 
     public List<Vector3> SelectFeaturePointWithinRadius(float zAvg, Dictionary<Vector3, bool> featurePoints)

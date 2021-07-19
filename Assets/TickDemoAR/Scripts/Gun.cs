@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 public class Gun : MonoBehaviour
 {
@@ -16,10 +18,14 @@ public class Gun : MonoBehaviour
     private Vector3 muzzleDirection;
     Coroutine present;
     Coroutine stow;
+    List<ARRaycastHit> arPlaneHitResults;
+    ARRaycastManager aRRaycastManager;
 
     void Start()
     {
       anim = GetComponent<Animator>(); 
+      aRRaycastManager = GetComponentInParent<ARRaycastManager>();
+      arPlaneHitResults = new List<ARRaycastHit>();
       flash.SetActive(false);   
     }
 
@@ -48,17 +54,28 @@ public class Gun : MonoBehaviour
     {
        // apply the current quaternion transformation to the z vector.
       muzzleDirection = muzzle.rotation * Vector3.forward;
-      RaycastHit hit;
+      RaycastHit[] hits;
       Ray bulletDirection = new Ray(muzzle.position, muzzleDirection);
       // Debug.DrawRay(muzzle.position, muzzleDirection, Color.red, 1f); // for debug purposes.
-      if (Physics.SphereCast(bulletDirection, acp45RadiusInMeters, out hit))
+      hits = Physics.SphereCastAll(bulletDirection, acp45RadiusInMeters);
+      if (hits.Length > 0) 
       {
-        Debug.Log(hit.collider.gameObject);
-        if (hit.collider.tag == "Spider")
+        foreach(RaycastHit hit in hits)
         {
-          SpiderBrain brainInstance = hit.collider.gameObject.GetComponent<SpiderBrain>();
-          brainInstance.Die();
-          Instantiate(bulletImpactAndHole, hit.collider.transform.position, Quaternion.identity);
+          if (hit.collider.tag == "Spider")
+          {
+            SpiderBrain brainInstance = hit.collider.gameObject.GetComponent<SpiderBrain>();
+            brainInstance.Die();
+            Instantiate(bulletImpactAndHole, hit.point, Quaternion.identity);
+          }
+        }
+      }
+      else 
+      {
+        if (aRRaycastManager.Raycast(bulletDirection, arPlaneHitResults, TrackableType.PlaneWithinPolygon))
+        {
+          Debug.Log("Planes: " + arPlaneHitResults.Count);
+          Instantiate(bulletImpactAndHole, arPlaneHitResults[arPlaneHitResults.Count - 1].pose.position, Quaternion.identity);
         }
       }
     }

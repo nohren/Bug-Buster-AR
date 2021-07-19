@@ -116,7 +116,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 0.6
-      minScalar: 0.5
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -248,8 +248,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1
-      minScalar: 0.5
+      scalar: 2
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -2456,7 +2456,7 @@ ParticleSystem:
     magnitude:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 10
+      scalar: 20
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4740,7 +4740,7 @@ Transform:
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.0415, y: 0.0415, z: 0.0415}
+  m_LocalScale: {x: 0.0515, y: 0.0515, z: 0.0515}
   m_Children:
   - {fileID: 400000}
   - {fileID: 400004}
@@ -9441,6 +9441,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OnlyDeactivate: 0
+  lifeTimeInSeconds: 3
 --- !u!1 &100004
 GameObject:
   m_ObjectHideFlags: 0
@@ -14211,7 +14212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 395f3a2ded34a634fbd77ee83f9939a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifetime: 10
+  lifetime: 20
   fadeoutpercent: 15
   frames: {x: 2, y: 2}
   randomRotation: 1
