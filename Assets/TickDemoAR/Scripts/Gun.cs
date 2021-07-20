@@ -124,8 +124,7 @@ public class Gun : MonoBehaviour
       firing = false;
       stow = StartCoroutine(StowGunAnimation());
     }
-   
-    
+
     private IEnumerator PresentGunAnimation()
     {
       Vector3 pos = transform.localPosition;
