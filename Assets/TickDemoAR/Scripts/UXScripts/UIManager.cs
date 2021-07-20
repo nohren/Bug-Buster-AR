@@ -118,6 +118,10 @@ public class UIManager : MonoBehaviour
     bool m_SecondaryGoalReached;
     
     Queue<UXHandle> m_UXOrderedQueue;
+    public Queue<UXHandle> UXOrderedQueue
+    {
+      get => m_UXOrderedQueue;
+    }
     UXHandle m_CurrentHandle;
     bool m_ProcessingInstructions;
     bool m_PlacedObject;
@@ -211,6 +215,9 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
+        // Debug.Log("Processing Instructions? " + m_ProcessingInstructions);
+        // Debug.Log("Queue Count: " + m_UXOrderedQueue.Count);
+        // Debug.Log("Placed Object? " + m_PlacedObject);
         if (m_AnimationManager.localizeText)
         {
             if (!m_LocalizationManager.localizationComplete)
@@ -218,16 +225,18 @@ public class UIManager : MonoBehaviour
                 return;
             }
         }
-
+        // Debug.Log("Processing Instructions? " + m_ProcessingInstructions);
         if (m_UXOrderedQueue.Count > 0 && !m_ProcessingInstructions)
         {
             // pop off
             m_CurrentHandle = m_UXOrderedQueue.Dequeue();
             
-            // exit instantly, if the goal is already met it will skip showing the first UI and move to the next in the queue 
+            // exit instantly, if the goal is already met it will skip showing the first UI and move to the next in the queue
+            // i.e if we already have established tracking! 
             m_GoalReached = GetGoal(m_CurrentHandle.Goal);
             if (m_GoalReached.Invoke())
             {
+                Debug.Log("Instantly reaching goal, return");
                 return;
             }
 
@@ -240,7 +249,7 @@ public class UIManager : MonoBehaviour
         if (m_ProcessingInstructions)
         {
             // start listening for goal reached
-            if (m_GoalReached.Invoke())
+            if (m_GoalReached.Invoke()) //this happense once a plane is sensed
             {
                 // if goal reached, fade off
                 if (!m_FadedOff)

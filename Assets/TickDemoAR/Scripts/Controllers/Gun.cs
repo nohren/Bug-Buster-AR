@@ -74,7 +74,6 @@ public class Gun : MonoBehaviour
       {
         if (aRRaycastManager.Raycast(bulletDirection, arPlaneHitResults, TrackableType.PlaneWithinPolygon))
         {
-          Debug.Log("Planes: " + arPlaneHitResults.Count);
           Instantiate(bulletImpactAndHole, arPlaneHitResults[arPlaneHitResults.Count - 1].pose.position, Quaternion.identity);
         }
       }

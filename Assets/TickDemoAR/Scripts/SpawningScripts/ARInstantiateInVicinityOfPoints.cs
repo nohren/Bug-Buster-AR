@@ -41,12 +41,12 @@ public class ARInstantiateInVicinityOfPoints : MonoBehaviour
     
     void OnEnable()
     {
-      OnButtonClick.OnShakingTheTree += CheckForPointsAndShaking;
+      OnButtonClick.AROnboarding += CheckForPointsAndShaking;
       OnButtonClick.FinishedShakingTree += FinishCheckForPointsAndShaking;
     }
     void OnDisable()
     {
-      OnButtonClick.OnShakingTheTree -= CheckForPointsAndShaking;
+      OnButtonClick.AROnboarding -= CheckForPointsAndShaking;
       OnButtonClick.FinishedShakingTree -= FinishCheckForPointsAndShaking;
     }
 

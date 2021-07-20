@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
-public class DisableTrackedVisuals : MonoBehaviour
+public class ToggleTrackedVisuals : MonoBehaviour
 {
     [SerializeField]
     [Tooltip("Disables spawned feature points and the ARPointCloudManager")]
@@ -43,15 +43,26 @@ public class DisableTrackedVisuals : MonoBehaviour
         get => m_PlaneManager;
         set => m_PlaneManager = value;
     }
+
+    private GameObject planePrefab;
+    private GameObject featurePointPrefab;
     
     void OnEnable()
     {
         PlaceObjectsOnPlane.onPlacedObject += OnPlacedObject;
+        OnButtonClick.AROnboarding += OnClickedSpawn;
     }
 
     void OnDisable()
     {
         PlaceObjectsOnPlane.onPlacedObject -= OnPlacedObject;
+        OnButtonClick.AROnboarding -= OnClickedSpawn;
+    }
+    
+    void Start()
+    {
+      planePrefab = m_PlaneManager.planePrefab;
+      featurePointPrefab = m_PointCloudManager.pointCloudPrefab;
     }
 
     void OnPlacedObject()
@@ -59,13 +70,28 @@ public class DisableTrackedVisuals : MonoBehaviour
         if (m_DisableFeaturePoints)
         {
             m_PointCloudManager.SetTrackablesActive(false);
-            m_PointCloudManager.enabled = false;
+            m_PointCloudManager.pointCloudPrefab = null;
         }
 
         if (m_DisablePlaneRendering)
         {
             m_PlaneManager.SetTrackablesActive(false);
-            m_PlaneManager.enabled = false;
+            m_PlaneManager.planePrefab = null;
+        }
+    }
+     void OnClickedSpawn()
+    {
+        if (m_DisableFeaturePoints)
+        {
+            m_PointCloudManager.enabled = false;
+            m_PointCloudManager.pointCloudPrefab = featurePointPrefab;
+            m_PointCloudManager.enabled = true;
+        }
+
+        if (m_DisablePlaneRendering)
+        {
+            m_PlaneManager.SetTrackablesActive(true);
+            m_PlaneManager.planePrefab = planePrefab;
         }
     }
 }

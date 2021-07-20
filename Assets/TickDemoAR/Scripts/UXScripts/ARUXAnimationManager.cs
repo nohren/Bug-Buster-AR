@@ -241,6 +241,7 @@ public class ARUXAnimationManager : MonoBehaviour
                 {
                     if (onFadeOffComplete != null)
                     {
+                        // Debug.Log("fade out in alphawhite transparent style!");
                         onFadeOffComplete();
                     }
 
@@ -392,6 +393,8 @@ public class ARUXAnimationManager : MonoBehaviour
         if (m_VideoPlayer.clip != null)
         {
             // handle exiting fade out early if currently fading out another Clip
+            // Debug.Log("video not null");
+            // Debug.Log("Tweening bool: " + m_Tweening + " Fade bool: " + m_FadeOn);
             if (m_Tweening || m_FadeOn)
             {
                 // stop tween immediately
@@ -400,7 +403,7 @@ public class ARUXAnimationManager : MonoBehaviour
                 m_InstructionText.color = m_AlphaWhite;
                 if (onFadeOffComplete != null)
                 {
-                    onFadeOffComplete();
+                    onFadeOffComplete(); 
                 }
             }
 
