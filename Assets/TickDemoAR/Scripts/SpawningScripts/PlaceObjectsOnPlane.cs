@@ -47,16 +47,16 @@ public class PlaceObjectsOnPlane : MonoBehaviour
         get => m_CanReposition;
         set => m_CanReposition = value;
     }
-    UIManager m_UIManager;
-    bool previousTouchMadeObject = false; //as opposed to made UI
+    // UIManager m_UIManager;
+    // bool previousTouchMadeObject = false; //as opposed to made UI
     void Awake()
     {
       m_RaycastManager = GetComponent<ARRaycastManager>();
     }
-    void Start()
-    {
-      m_UIManager = GameObject.FindGameObjectWithTag("AROnboarding").GetComponent<UIManager>();
-    }
+    // void Start()
+    // {
+    //   m_UIManager = GameObject.FindGameObjectWithTag("AROnboarding").GetComponent<UIManager>();
+    // }
    
     // going to update this area to accept instantiation on the "+" feature points (as well as planes).  I want to update the max number of objects to number of objects per touch to instantiate.  Let's say 1 for now.
     void Update()
@@ -74,8 +74,6 @@ public class PlaceObjectsOnPlane : MonoBehaviour
                 }  
                 // Debug.Log("Count of queue" + m_UIManager.UXOrderedQueue.Count);
                 //previous touch was UI AND at least 1 or 0 instructions, then we can place a spider.
-                if (previousTouchMadeObject == false && m_UIManager.UXOrderedQueue.Count < 2) 
-                {
                   if (m_RaycastManager.Raycast(touch.position, s_Hits, TrackableType.PlaneWithinPolygon | TrackableType.FeaturePoint))
                   {
                       Pose hitPose = s_Hits[0].pose;
@@ -94,24 +92,26 @@ public class PlaceObjectsOnPlane : MonoBehaviour
                       {
                           onPlacedObject();
                       }
-                      previousTouchMadeObject = true;
-                      // disable feature points and plane manager prefabs, there is a script for this called ToggleTracked visuals
-                      // it kinda sucks though
                   }
-                }
-                else 
-                {
-                    ResetUI();
-                    previousTouchMadeObject = false;
-                }
             }
         }
     }
 
-    private void ResetUI()
-    {
-        m_UIManager.AddToQueue(new UXHandle(UIManager.InstructionUI.CrossPlatformFindAPlane, UIManager.InstructionGoals.FoundAPlane));
-        m_UIManager.AddToQueue(new UXHandle(UIManager.InstructionUI.TapToPlace, UIManager.InstructionGoals.PlacedAnObject));
-        // enable feature point and plane prefabs!
-    }
+                    //   previousTouchMadeObject = true;
+                      // disable feature points and plane manager prefabs, there is a script for this called ToggleTracked visuals
+                      // it kinda sucks though
+                // if (previousTouchMadeObject == false && m_UIManager.UXOrderedQueue.Count < 2) 
+                // {
+                // }
+                // else 
+                // {
+                //     ResetUI();
+                //     previousTouchMadeObject = false;
+                // }
+    // private void ResetUI()
+    // {
+    //     m_UIManager.AddToQueue(new UXHandle(UIManager.InstructionUI.CrossPlatformFindAPlane, UIManager.InstructionGoals.FoundAPlane));
+    //     m_UIManager.AddToQueue(new UXHandle(UIManager.InstructionUI.TapToPlace, UIManager.InstructionGoals.PlacedAnObject));
+    //     // enable feature point and plane prefabs!
+    // }
 }

@@ -259,6 +259,11 @@ public class UIManager : MonoBehaviour
                 }
             }
         }
+
+        if (m_UXOrderedQueue.Count == 0 && !m_ProcessingInstructions)
+        {
+          PlacedObject();
+        }
     }
 
     void GetManagers()

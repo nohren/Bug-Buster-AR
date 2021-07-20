@@ -41,13 +41,13 @@ public class ARInstantiateInVicinityOfPoints : MonoBehaviour
     
     void OnEnable()
     {
-      OnButtonClick.AROnboarding += CheckForPointsAndShaking;
-      OnButtonClick.FinishedShakingTree += FinishCheckForPointsAndShaking;
+      OnARInstructionsClick.AROnboarding += CheckForPointsAndShaking;
+      OnARInstructionsClick.FinishedShakingTree += FinishCheckForPointsAndShaking;
     }
     void OnDisable()
     {
-      OnButtonClick.AROnboarding -= CheckForPointsAndShaking;
-      OnButtonClick.FinishedShakingTree -= FinishCheckForPointsAndShaking;
+      OnARInstructionsClick.AROnboarding -= CheckForPointsAndShaking;
+      OnARInstructionsClick.FinishedShakingTree -= FinishCheckForPointsAndShaking;
     }
 
     // Start is called before the first frame update

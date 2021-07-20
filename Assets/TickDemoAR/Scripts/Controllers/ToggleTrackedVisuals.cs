@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 public class ToggleTrackedVisuals : MonoBehaviour
 {
@@ -49,49 +50,55 @@ public class ToggleTrackedVisuals : MonoBehaviour
     
     void OnEnable()
     {
-        PlaceObjectsOnPlane.onPlacedObject += OnPlacedObject;
-        OnButtonClick.AROnboarding += OnClickedSpawn;
+        PlaceObjectsOnPlane.onPlacedObject += DisableARView;
+        OnARInstructionsClick.AROnboarding += EnableARView;
     }
 
     void OnDisable()
     {
-        PlaceObjectsOnPlane.onPlacedObject -= OnPlacedObject;
-        OnButtonClick.AROnboarding -= OnClickedSpawn;
+        PlaceObjectsOnPlane.onPlacedObject -= DisableARView;
+        OnARInstructionsClick.AROnboarding -= EnableARView;
     }
     
-    void Start()
+    // void Start()
+    // {
+    //   planePrefab = m_PlaneManager.planePrefab;
+    //   featurePointPrefab = m_PointCloudManager.pointCloudPrefab;
+    // }
+
+    // void Update()
+    // {
+      
+    // }
+
+    void OnCreateTrackable()
     {
-      planePrefab = m_PlaneManager.planePrefab;
-      featurePointPrefab = m_PointCloudManager.pointCloudPrefab;
+        Debug.Log("New trackable");
+        
     }
 
-    void OnPlacedObject()
+    void DisableARView()
     {
         if (m_DisableFeaturePoints)
         {
             m_PointCloudManager.SetTrackablesActive(false);
-            m_PointCloudManager.pointCloudPrefab = null;
         }
 
         if (m_DisablePlaneRendering)
         {
             m_PlaneManager.SetTrackablesActive(false);
-            m_PlaneManager.planePrefab = null;
         }
     }
-     void OnClickedSpawn()
+     void EnableARView()
     {
         if (m_DisableFeaturePoints)
         {
-            m_PointCloudManager.enabled = false;
-            m_PointCloudManager.pointCloudPrefab = featurePointPrefab;
-            m_PointCloudManager.enabled = true;
+            m_PointCloudManager.SetTrackablesActive(true);
         }
 
         if (m_DisablePlaneRendering)
         {
             m_PlaneManager.SetTrackablesActive(true);
-            m_PlaneManager.planePrefab = planePrefab;
         }
     }
 }

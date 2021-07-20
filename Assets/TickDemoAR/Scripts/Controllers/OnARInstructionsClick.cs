@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class OnButtonClick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class OnARInstructionsClick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public delegate void AROnboard();
     public static event AROnboard AROnboarding;
@@ -25,12 +25,9 @@ public class OnButtonClick : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
       }
       if (m_UIManager.UXOrderedQueue.Count == 0)
       {
-        Debug.Log("Add to Queue");
         m_UIManager.AddToQueue(new UXHandle(UIManager.InstructionUI.CrossPlatformFindAPlane, UIManager.InstructionGoals.FoundAPlane));
         m_UIManager.AddToQueue(new UXHandle(UIManager.InstructionUI.TapToPlace, UIManager.InstructionGoals.PlacedAnObject));
       }
-
-      
     }
 
     public void OnPointerUp(PointerEventData ed)
