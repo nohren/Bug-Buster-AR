@@ -10,12 +10,10 @@ public class OnARInstructionsClick : MonoBehaviour, IPointerDownHandler, IPointe
     public delegate void StillTree();
     public static event StillTree FinishedShakingTree;
     private UIManager m_UIManager;
-    private GameObject m_ScreenSpaceUI;
 
     private void Start()
     {
       m_UIManager = GameObject.FindGameObjectWithTag("AROnboarding").GetComponent<UIManager>();
-      m_ScreenSpaceUI = GameObject.FindGameObjectWithTag("AROnboarding");
     }
     public void OnPointerDown(PointerEventData ed)
     {
@@ -23,7 +21,7 @@ public class OnARInstructionsClick : MonoBehaviour, IPointerDownHandler, IPointe
       {
         AROnboarding();  
       }
-      if (m_UIManager.UXOrderedQueue.Count == 0)
+      if (m_UIManager.UXOrderedQueue.Count == 0 && !m_UIManager.ProcessingInstructions)
       {
         m_UIManager.AddToQueue(new UXHandle(UIManager.InstructionUI.CrossPlatformFindAPlane, UIManager.InstructionGoals.FoundAPlane));
         m_UIManager.AddToQueue(new UXHandle(UIManager.InstructionUI.TapToPlace, UIManager.InstructionGoals.PlacedAnObject));

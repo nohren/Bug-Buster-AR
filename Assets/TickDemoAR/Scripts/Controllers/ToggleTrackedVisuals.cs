@@ -70,10 +70,13 @@ public class ToggleTrackedVisuals : MonoBehaviour
     // {
       
     // }
-
+    
+    // stategy is to get a reference to the class that inherits the protected abstract class and implement this method. Only 
+    // when we are in the state of not disabledARView
+    // can create state that tracks that in here.
     void OnCreateTrackable()
     {
-        Debug.Log("New trackable");
+        
         
     }
 

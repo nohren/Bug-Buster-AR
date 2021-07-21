@@ -124,6 +124,11 @@ public class UIManager : MonoBehaviour
     }
     UXHandle m_CurrentHandle;
     bool m_ProcessingInstructions;
+    public bool ProcessingInstructions
+    {
+        get => m_ProcessingInstructions;
+    }
+    
     bool m_PlacedObject;
 
     [SerializeField]
@@ -248,8 +253,8 @@ public class UIManager : MonoBehaviour
 
         if (m_ProcessingInstructions)
         {
-            // start listening for goal reached
-            if (m_GoalReached.Invoke()) //this happense once a plane is sensed
+            // start listening for goal reached, this happense once a plane is sensed or an object is placed etc. Same as above.
+            if (m_GoalReached.Invoke()) 
             {
                 // if goal reached, fade off
                 if (!m_FadedOff)
