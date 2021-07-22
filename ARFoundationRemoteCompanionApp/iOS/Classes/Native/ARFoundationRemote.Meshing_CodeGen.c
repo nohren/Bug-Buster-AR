@@ -50,17 +50,17 @@ static Il2CppMethodPointer s_methodPointers[11] =
 };
 static const int32_t s_InvokerIndices[11] = 
 {
-	4960,
-	3188,
-	3188,
-	3188,
-	3188,
-	5005,
-	3188,
-	5024,
-	3188,
-	3188,
-	5024,
+	5701,
+	3765,
+	3765,
+	3765,
+	3765,
+	5751,
+	3765,
+	5770,
+	3765,
+	3765,
+	5770,
 };
 extern const CustomAttributesCacheGenerator g_ARFoundationRemote_Meshing_AttributeGenerators[];
 IL2CPP_EXTERN_C const Il2CppCodeGenModule g_ARFoundationRemote_Meshing_CodeGenModule;

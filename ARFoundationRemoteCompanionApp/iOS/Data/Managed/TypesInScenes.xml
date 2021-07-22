@@ -56,6 +56,10 @@
 		<type fullname="ARFoundationRemote.Runtime.SetupARFoundationVersionSpecificComponents" preserve="nothing"/>
 		<type fullname="ARFoundationRemote.Runtime.ToggleFacesVisibility" preserve="nothing"/>
 	</assembly>
+	<assembly fullname="Assembly-CSharp">
+		<type fullname="ARFeatheredPlaneMeshVisualizer" preserve="nothing"/>
+		<type fullname="BrassCasing" preserve="nothing"/>
+	</assembly>
 	<assembly fullname="Unity.TextMeshPro">
 		<type fullname="TMPro.TMP_FontAsset" preserve="nothing"/>
 		<type fullname="TMPro.TMP_Settings" preserve="nothing"/>

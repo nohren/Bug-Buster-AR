@@ -47,61 +47,78 @@ public class ToggleTrackedVisuals : MonoBehaviour
 
     private GameObject planePrefab;
     private GameObject featurePointPrefab;
+
+    bool m_featurePointsDisabled;
+    bool m_planesDisabled;
     
     void OnEnable()
     {
-        PlaceObjectsOnPlane.onPlacedObject += DisableARView;
-        OnARInstructionsClick.AROnboarding += EnableARView;
+        PlaceObjectsOnPlane.onPlacedObject += ToggleViewDisabled;
+        OnARInstructionsClick.AROnboarding += ToggleViewEnabled;
+        m_PlaneManager.planesChanged += ARPlaneViewListener;
+        m_PointCloudManager.pointCloudsChanged += ARPointCloudListener;
     }
 
     void OnDisable()
     {
-        PlaceObjectsOnPlane.onPlacedObject -= DisableARView;
-        OnARInstructionsClick.AROnboarding -= EnableARView;
-    }
-    
-    // void Start()
-    // {
-    //   planePrefab = m_PlaneManager.planePrefab;
-    //   featurePointPrefab = m_PointCloudManager.pointCloudPrefab;
-    // }
-
-    // void Update()
-    // {
-      
-    // }
-    
-    // stategy is to get a reference to the class that inherits the protected abstract class and implement this method. Only 
-    // when we are in the state of not disabledARView
-    // can create state that tracks that in here.
-    void OnCreateTrackable()
-    {
-        
-        
+        PlaceObjectsOnPlane.onPlacedObject -= ToggleViewDisabled;
+        OnARInstructionsClick.AROnboarding -= ToggleViewEnabled;
+        m_PlaneManager.planesChanged -= ARPlaneViewListener;
+        m_PointCloudManager.pointCloudsChanged -= ARPointCloudListener;
     }
 
-    void DisableARView()
+    void ToggleViewDisabled()
     {
-        if (m_DisableFeaturePoints)
-        {
-            m_PointCloudManager.SetTrackablesActive(false);
-        }
+        m_planesDisabled = true;
+        m_featurePointsDisabled = true;
+        DisablePointCloudPrefabs();
+        DisablePlanePrefabs();
+    }
+    void ToggleViewEnabled()
+    {
+       EnablePlanePrefabs();
+       EnablePointCloudPrefabs();
+    }
+    
+    // listeners, they are invoked when an event is invoked matching their return type and signature (signature meaning paramter type and amount).  Once invoked interesting information is passed into them.
+    void ARPlaneViewListener(ARPlanesChangedEventArgs e)
+    {
+      DisablePlanePrefabs();
+    }
+    void ARPointCloudListener(ARPointCloudChangedEventArgs e)
+    {
+      DisablePointCloudPrefabs();
+    }
 
-        if (m_DisablePlaneRendering)
+    void DisablePlanePrefabs()
+    {
+        if (m_DisablePlaneRendering && m_planesDisabled)
         {
             m_PlaneManager.SetTrackablesActive(false);
         }
     }
-     void EnableARView()
+    void DisablePointCloudPrefabs()
     {
-        if (m_DisableFeaturePoints)
+       if (m_DisableFeaturePoints && m_featurePointsDisabled)
         {
-            m_PointCloudManager.SetTrackablesActive(true);
+            m_PointCloudManager.SetTrackablesActive(false);
         }
-
+    }
+    void EnablePlanePrefabs()
+    {
         if (m_DisablePlaneRendering)
-        {
+        {   
+            m_planesDisabled = false;
             m_PlaneManager.SetTrackablesActive(true);
         }
     }
+    void EnablePointCloudPrefabs()
+    {
+       if (m_DisableFeaturePoints)
+        {
+            m_featurePointsDisabled = false;
+            m_PointCloudManager.SetTrackablesActive(true);
+        }
+    }
+
 }
