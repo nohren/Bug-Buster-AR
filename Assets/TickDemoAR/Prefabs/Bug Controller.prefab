@@ -55,6 +55,10 @@ PrefabInstance:
       propertyPath: part
       value: 
       objectReference: {fileID: 1494575573460789058}
+    - target: {fileID: -6816949783511205230, guid: 33b828b8f1c31334988de54e3fe47ee6, type: 3}
+      propertyPath: bugController
+      value: 
+      objectReference: {fileID: 1620548827280883516}
     - target: {fileID: 1715103906888602, guid: 33b828b8f1c31334988de54e3fe47ee6, type: 3}
       propertyPath: m_Name
       value: spider_pref

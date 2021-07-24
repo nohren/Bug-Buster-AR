@@ -11,9 +11,9 @@ public class Gun : MonoBehaviour
     private int fireHashId = Animator.StringToHash("Fire");
     private bool firing = false;
     public GameObject flash;
-    private int thompsonM1a1RPM = 700;
+    private const int thompsonM1a1RPM = 700;
+    private  const float acp45RadiusInMeters = 0.0115f / 2f;
     private float wholeBrass = 0f;
-    private float acp45RadiusInMeters = 0.0115f / 2f;
     public Transform muzzle;
     private Vector3 muzzleDirection;
     Coroutine present;

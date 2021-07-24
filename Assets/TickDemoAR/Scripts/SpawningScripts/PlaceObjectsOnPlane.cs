@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(ARRaycastManager))]
 public class PlaceObjectsOnPlane : MonoBehaviour
@@ -11,7 +12,7 @@ public class PlaceObjectsOnPlane : MonoBehaviour
     [SerializeField]
     [Tooltip("Instantiates this prefab on a plane at the touch location.")]
     GameObject m_PlacedPrefab;
-
+    public Slider sl;
 
     /// <summary>
     /// The prefab to instantiate on touch.
@@ -35,9 +36,12 @@ public class PlaceObjectsOnPlane : MonoBehaviour
     ARRaycastManager m_RaycastManager;
 
     static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
-    
-    [SerializeField]
-    int m_objectsPerTouch = 1;
+    private int m_objectsPerTouch = 1;
+    public int SpawnAmount
+    {
+        get => m_objectsPerTouch;
+        set => m_objectsPerTouch = value;    
+    }
 
     [SerializeField]
     bool m_CanReposition = true;
@@ -53,10 +57,6 @@ public class PlaceObjectsOnPlane : MonoBehaviour
     {
       m_RaycastManager = GetComponent<ARRaycastManager>();
     }
-    // void Start()
-    // {
-    //   m_UIManager = GameObject.FindGameObjectWithTag("AROnboarding").GetComponent<UIManager>();
-    // }
    
     // going to update this area to accept instantiation on the "+" feature points (as well as planes).  I want to update the max number of objects to number of objects per touch to instantiate.  Let's say 1 for now.
     void Update()
@@ -81,6 +81,7 @@ public class PlaceObjectsOnPlane : MonoBehaviour
                       for (int s = 0; s < m_objectsPerTouch; s++)
                       {
                           spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
+                          spawnedObject.GetComponentInChildren<SpiderBrain>().HandleScaleSizing(sl.value);
                       }
                       
                       if (m_CanReposition)

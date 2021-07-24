@@ -15,16 +15,25 @@ public class SpiderBrain : MonoBehaviour
     private bool animationLoop = false;
     private float rotationDegreesPerSecond = 0f;
     private float speedInCentimetersPerSecond = 0f;
-    private float spiderSpeed;
-    private const float centimeterToMeter = 0.01f;
-    private float rotationDegreesPerFrame;
-    private bool spiderCentimeters = true;
-    private Vector3 spiderDirection;
+    private const float centimeterToMeterConversion = 0.01f;
+    private float minSpeed = 0.6f;
+    private float maxSpeed = 4f;
+    private float baseSizeInCM = 6f;
     delegate IEnumerator AnimationMethod();
     AnimationMethod[] animationMethods;
     Coroutine currentAnimation;
     private ParticleSystem part;
     private GameObject parent;
+    public GameObject bugController;
+
+    private void OnEnable()
+    {
+      ScaleSlider.ScaleMoved += HandleScaleSizing;
+    }
+    private void OnDisable()
+    {
+      ScaleSlider.ScaleMoved -= HandleScaleSizing;
+    }
     
     private void Start()
     {
@@ -47,6 +56,8 @@ public class SpiderBrain : MonoBehaviour
             animationLoop = true;
             currentAnimation = StartCoroutine(animationMethods[GenerateRandomNumber()]());
         }
+        Debug.Log("MinSpeed and MaxSpeed: " + minSpeed + " " + maxSpeed);
+        Debug.Log("Speed cm/s: " + speedInCentimetersPerSecond);
         MovementUpdater();
     }
 
@@ -124,24 +135,28 @@ public class SpiderBrain : MonoBehaviour
       part.Play();
       gameObject.SetActive(false);
     }
+    public void HandleScaleSizing(float scaleSize)
+    {
+      // set the scale of the gameobject. Then calculate relative diameter in cm and set speed min and max to 1/40th dia and 2/3 dia
+      // in cm per second.
+      bugController.transform.localScale = Vector3.one * scaleSize;
+      float relativeSizeInCM = baseSizeInCM * scaleSize;
+      minSpeed = relativeSizeInCM * 0.1f;
+      maxSpeed = relativeSizeInCM * 0.667f;
+    }
 
     private void MovementUpdater()
     {
       // this method is designed to sit in the fixed update, update values each frame and apply forces as needed.
       anim.SetFloat(rotateHashId, Math.Abs(rotationDegreesPerSecond));
       anim.SetFloat(runHashId, Math.Abs(speedInCentimetersPerSecond));
-      rotationDegreesPerFrame = rotationDegreesPerSecond * Time.deltaTime;
+      float rotationDegreesPerFrame = rotationDegreesPerSecond * Time.deltaTime;
       transform.Rotate(Vector3.up, rotationDegreesPerFrame);
 
       // constantly calculate new vector3 for spider to move in that direction and rate of speed
-      spiderDirection = transform.rotation * Vector3.forward;
-      if (spiderCentimeters == true)
-      {
-        spiderSpeed = speedInCentimetersPerSecond * centimeterToMeter;
-      } else {
-        spiderSpeed = speedInCentimetersPerSecond; // this becomes meters per second
-      }
-      rb.velocity = spiderDirection * spiderSpeed;
+      Vector3 spiderDirection = transform.rotation * Vector3.forward;
+      float spiderSpeedInMetersPerSecond = speedInCentimetersPerSecond * centimeterToMeterConversion;
+      rb.velocity = spiderDirection * spiderSpeedInMetersPerSecond;
     }
     private int GenerateRandomNumber()
     {
@@ -149,7 +164,7 @@ public class SpiderBrain : MonoBehaviour
     }
     private float SpeedGenerator()
     {
-        //initally provides speeds between 0.1 and 4 cm/s, can scale to 0.1 and 4 m/s given if the bug size gets scaled.
-        return UnityEngine.Random.Range(0.1f, 4f);
+        // provides speeds between 0.6 and 4 cm/s at 1 factor. At factor 20, it provides speeds between 12 adn 80 cm/second
+        return UnityEngine.Random.Range(minSpeed, maxSpeed);
     }
 }
