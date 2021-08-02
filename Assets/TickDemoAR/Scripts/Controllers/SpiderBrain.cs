@@ -56,8 +56,6 @@ public class SpiderBrain : MonoBehaviour
             animationLoop = true;
             currentAnimation = StartCoroutine(animationMethods[GenerateRandomNumber()]());
         }
-        Debug.Log("MinSpeed and MaxSpeed: " + minSpeed + " " + maxSpeed);
-        Debug.Log("Speed cm/s: " + speedInCentimetersPerSecond);
         MovementUpdater();
     }
 

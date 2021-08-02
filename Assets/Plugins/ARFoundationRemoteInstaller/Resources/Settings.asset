@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd607c3f010ab45a29ecfcf8d5a898ef, type: 3}
   m_Name: Settings
   m_EditorClassIdentifier: 
-  ARCompanionAppIP: 10.0.0.67
+  ARCompanionAppIP: 10.0.0.68
   arCompanionSettings:
     cameraVideoSettings:
       enableVideo: 1

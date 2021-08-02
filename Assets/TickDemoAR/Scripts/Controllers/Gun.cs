@@ -71,10 +71,12 @@ public class Gun : MonoBehaviour
         }
       }
       else 
-      {
+      { 
+        // What is our plane target?
         if (aRRaycastManager.Raycast(bulletDirection, arPlaneHitResults, TrackableType.PlaneWithinPolygon))
         {
-          Instantiate(bulletImpactAndHole, arPlaneHitResults[arPlaneHitResults.Count - 1].pose.position, Quaternion.identity);
+          Pose farPlanePose = arPlaneHitResults[arPlaneHitResults.Count - 1].pose;
+          Instantiate(bulletImpactAndHole, farPlanePose.position, farPlanePose.rotation);
         }
       }
     }

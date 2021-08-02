@@ -69,7 +69,7 @@ public class PlaceObjectsOnPlane : MonoBehaviour
             {
                 if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
                 {
-                    // touched the UI, do not raycast.
+                    // touched a UI object, do not raycast.
                     return;
                 }  
                 // Debug.Log("Count of queue" + m_UIManager.UXOrderedQueue.Count);
