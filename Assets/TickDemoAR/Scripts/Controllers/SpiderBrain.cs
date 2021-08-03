@@ -158,7 +158,7 @@ public class SpiderBrain : MonoBehaviour
     }
     private int GenerateRandomNumber()
     {
-        return UnityEngine.Random.Range(0, animationMethods.Length - 1);
+        return UnityEngine.Random.Range(0, animationMethods.Length);
     }
     private float SpeedGenerator()
     {
