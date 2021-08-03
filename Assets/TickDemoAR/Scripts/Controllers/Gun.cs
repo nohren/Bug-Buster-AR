@@ -68,7 +68,10 @@ public class Gun : MonoBehaviour
             AudioSource spiderAudioSource = spider.GetComponentInParent<AudioSource>();
             SpiderBrain brainInstance = spider.GetComponent<SpiderBrain>();
             brainInstance.Die();
-            AudioManager.SharedInstance.PlaySpiderDeathSound(spiderAudioSource);
+            if (AudioManager.SharedInstance.enabled)
+            {
+              AudioManager.SharedInstance.PlaySpiderDeathSound(spiderAudioSource);
+            }
             Instantiate(bulletImpactAndHole, hit.point, Quaternion.identity);
           }
         }
@@ -95,7 +98,10 @@ public class Gun : MonoBehaviour
             // shoot a bullet
             ShootABullet();
             // make the sound of firing and the brass casing hitting the ground
-            AudioManager.SharedInstance.PlayGunSound();
+            if (AudioManager.SharedInstance.enabled)
+            {
+              AudioManager.SharedInstance.PlayGunSound();
+            }
             // eject a casing
             GameObject brassCasing = ObjectPool.SharedInstance.GetPooledObject();
             if (brassCasing != null) 
