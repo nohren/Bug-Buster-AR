@@ -72,7 +72,7 @@ public class Gun : MonoBehaviour
             {
               AudioManager.SharedInstance.PlaySpiderDeathSound(spiderAudioSource);
             }
-            Instantiate(bulletImpactAndHole, hit.point, Quaternion.identity);
+            Instantiate(bulletImpactAndHole, hit.point, spider.transform.rotation);
           }
         }
       }
