@@ -52,10 +52,11 @@ public class Gun : MonoBehaviour
 
     private void ShootABullet()
     {
-       // apply the current quaternion transformation to the z vector.
+      // apply the current quaternion transformation to a Z vector to get the direction Vector3 of where the gun is pointing.
       muzzleDirection = muzzle.rotation * Vector3.forward;
       RaycastHit[] hits;
       Ray bulletDirection = new Ray(muzzle.position, muzzleDirection);
+      bool planeFound = aRRaycastManager.Raycast(bulletDirection, arPlaneHitResults, TrackableType.PlaneWithinPolygon);
       // Debug.DrawRay(muzzle.position, muzzleDirection, Color.red, 1f); // for debug purposes.
       hits = Physics.SphereCastAll(bulletDirection, acp45RadiusInMeters);
       if (hits.Length > 0) 
@@ -72,18 +73,20 @@ public class Gun : MonoBehaviour
             {
               AudioManager.SharedInstance.PlaySpiderDeathSound(spiderAudioSource);
             }
-            Instantiate(bulletImpactAndHole, hit.point, spider.transform.rotation);
+            if (!planeFound)
+            {
+              Instantiate(bulletImpactAndHole, hit.point, spider.transform.rotation);
+            }
           }
         }
       }
-      else 
-      { 
-        // What is our plane target?
-        if (aRRaycastManager.Raycast(bulletDirection, arPlaneHitResults, TrackableType.PlaneWithinPolygon))
-        {
-          Pose farPlanePose = arPlaneHitResults[arPlaneHitResults.Count - 1].pose;
-          Instantiate(bulletImpactAndHole, farPlanePose.position, farPlanePose.rotation);
-        }
+      if (planeFound)
+      {
+        // currently choosing the far plane.  The illusion is broken with any impact before the physical target.  If impact happens after
+        // we get a smaller bullet hole.  This is acceptable behavior given the tradeoff.
+        Pose planePose = arPlaneHitResults[arPlaneHitResults.Count - 1].pose;
+        // Debug.Log("Pose of far plane: " + planePose);
+        Instantiate(bulletImpactAndHole, planePose.position, planePose.rotation);
       }
     }
     private void GunMechanics()
