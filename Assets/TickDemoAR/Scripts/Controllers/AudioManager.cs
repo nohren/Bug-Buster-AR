@@ -35,6 +35,6 @@ public class AudioManager : MonoBehaviour
     }
     private int GenerateRandomInt()
     {
-        return UnityEngine.Random.Range(0, spiderAudioClips.Length - 1);
+        return UnityEngine.Random.Range(0, spiderAudioClips.Length);
     }
 }

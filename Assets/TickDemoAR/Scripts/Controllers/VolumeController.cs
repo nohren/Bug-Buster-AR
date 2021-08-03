@@ -26,6 +26,4 @@ public class VolumeController : MonoBehaviour
           gameAudioManager.SetActive(true);
       }
     }
-
-
 }
