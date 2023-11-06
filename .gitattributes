@@ -1,4 +1,4 @@
-*.cs linguist-language=C#
+linguist-language=C#
 
 ## git-lfs ##
 
