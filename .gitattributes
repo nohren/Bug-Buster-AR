@@ -1,3 +1,5 @@
+*.cs linguist-language=C#
+
 ## git-lfs ##
 
 #Image
